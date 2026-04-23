@@ -59,11 +59,11 @@ def get_spatial_log_df(tunnel_length, initial_m, final_m, t_hot, flow_type):
     table_data = {"Distance (m)": [f"{x:.1f}" for x in table_x]}
 
     if flow_type in ["Co-Current", "Compare Both"]:
-        table_data["Co-Current Temp (°C)"] = [f"{t:.1f}" for t in t_co]
         table_data["Co-Current Moisture (%)"] = [f"{m:.1f}" for m in m_co]
+        table_data["Co-Current Temp (°C)"] = [f"{t:.1f}" for t in t_co]
 
     if flow_type in ["Counter-Current", "Compare Both"]:
-        table_data["Counter-Current Temp (°C)"] = [f"{t:.1f}" for t in t_cnt]
         table_data["Counter-Current Moisture (%)"] = [f"{m:.1f}" for m in m_cnt]
+        table_data["Counter-Current Temp (°C)"] = [f"{t:.1f}" for t in t_cnt]
 
     return pd.DataFrame(table_data)
