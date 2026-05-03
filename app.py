@@ -66,11 +66,9 @@ else:
 
 air_velocity = st.sidebar.number_input("Air Velocity (m/s)", min_value=0.1, max_value=15.0, value=ideal_vel, step=0.1)
 
-# ---> UPDATE: Load both new variables <---
 default_ideal_temp = MATERIAL_DB[selected_material]["ideal_temp"] 
 absolute_max_temp = MATERIAL_DB[selected_material]["max_temp"]   
 
-# ---> UPDATE: Use both new variables in the input <---
 T_hot_in = st.sidebar.number_input(
     f"Burner Temp (Max {absolute_max_temp}°C)", 
     min_value=20, 
@@ -79,7 +77,19 @@ T_hot_in = st.sidebar.number_input(
     step=5
 )
 
-flow_type = st.sidebar.radio("Airflow Configuration", ["Co-Current", "Counter-Current", "Compare Both"])
+# ---> UPDATE: Intelligent Airflow Logic <---
+recommended_flow = mat_data.get("ideal_flow", "Co-Current")
+flow_logic = mat_data.get("flow_reason", "Standard flow configuration.")
+
+flow_options = ["Co-Current", "Counter-Current", "Compare Both"]
+default_index = flow_options.index(recommended_flow) if recommended_flow in flow_options else 0
+
+st.sidebar.markdown("---")
+flow_type = st.sidebar.radio("Airflow Configuration", flow_options, index=default_index)
+
+st.sidebar.info(f"💡 **System Recommendation:** For {selected_material}, **{recommended_flow}** airflow is strictly advised. {flow_logic}")
+st.sidebar.markdown("---")
+
 lpg_rate = st.sidebar.number_input("LPG Cost (₹/kg)", value=90.0, step=1.0)
 elec_rate = st.sidebar.number_input("Electricity Rate (₹/kWh)", value=8.0, step=0.5)
 
